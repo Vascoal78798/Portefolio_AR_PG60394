@@ -26,15 +26,16 @@ The script produces a comparison plot of episode lengths across:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
 import numpy as np
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+os.environ.setdefault("MPLCONFIGDIR", str(PROJECT_ROOT / ".mplconfig"))
 
 
 def parse_args() -> argparse.Namespace:
@@ -248,7 +249,7 @@ def main() -> None:
         _draw_policy_panel(ax, env, policy, paths[name], f"{name} | path={len(paths[name]) - 1}")
     fig_policy.suptitle("Windy Gridworld: greedy policy comparison")
 
-    output_dir = PACKAGE_ROOT / args.output_dir
+    output_dir = PROJECT_ROOT / args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
     fig_compare.savefig(output_dir / "comparison_lengths.png", dpi=150, bbox_inches="tight")
     fig_td.savefig(output_dir / "td_errors.png", dpi=150, bbox_inches="tight")

@@ -112,6 +112,11 @@ class MCTSNode:
 
         ``value`` is from **this node's player's** perspective.
         Each level up switches player, so we negate the value at every step.
+
+        TODO:
+        1. Increment `visit_count` by 1.
+        2. Add `value` to `value_sum` (from this node player's perspective).
+        3. If a parent exists, recurse to it with `-value` because the parent is the opponent.
         """
         self.visit_count += 1
         self.value_sum += value
@@ -208,6 +213,11 @@ class MCTSAgent:
         """Random playout from ``state``; returns outcome from ``player``'s perspective.
 
         Uses pure-function helpers so the environment object is never mutated.
+
+        TODO:
+        1. While the state is not terminal, choose a random legal action from `_available`.
+        2. Apply the move with `_apply` and switch the current player.
+        3. At the end, return `+1.0`, `0.0`, or `-1.0` from the original `player` perspective.
         """
         s = state
         current = player

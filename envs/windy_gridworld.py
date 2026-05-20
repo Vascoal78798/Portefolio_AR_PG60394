@@ -54,6 +54,7 @@ class WindyGridworldEnv(Environment[WindyGridworldState, WindyGridworldAction]):
             raise ValueError(f"Invalid action: {action}")
 
         row, col = state
+        
         delta_row, delta_col = ACTION_TO_DELTA[action]
         wind_strength = self.wind[col]
 
@@ -61,6 +62,7 @@ class WindyGridworldEnv(Environment[WindyGridworldState, WindyGridworldAction]):
         next_col = min(max(col + delta_col, 0), self.cols - 1)
         next_state = (next_row, next_col)
         done = next_state == self.goal
+        
         return next_state, self.reward_per_step, done
 
     def step(self, action: WindyGridworldAction) -> tuple[WindyGridworldState, float, bool]:

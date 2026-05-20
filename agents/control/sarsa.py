@@ -27,6 +27,13 @@ class SarsaControl(ControlAgent[StateT, ActionT]):
         self._selected_actions: dict[StateT, ActionT] = {}
 
     def select_action(self, state: StateT) -> ActionT:
+        """Choose an epsilon-greedy action and cache it for the SARSA bootstrap.
+
+        TODO:
+        1. With probability `self.epsilon`, choose a random action from `self.actions`.
+        2. Otherwise choose an action with the highest current action-value.
+        3. Store the chosen action in `self._selected_actions[state]` and return it.
+        """
         if self.rng.random() < self.epsilon:
             action = self.rng.choice(self.actions)
         else:
@@ -38,6 +45,14 @@ class SarsaControl(ControlAgent[StateT, ActionT]):
         return action
 
     def update_transition(self, transition: Transition[StateT, ActionT]) -> None:
+        """Apply the SARSA update using the cached next action for the next state.
+
+        TODO:
+        1. Use a bootstrap value of `0.0` on terminal transitions.
+        2. Otherwise read the cached next action from `self._selected_actions[transition.next_state]`.
+        3. Compute the SARSA target `reward + gamma * Q(next_state, next_action)`.
+        4. Apply the incremental update with `self.alpha`.
+        """
         bootstrap = 0.0
         if not transition.done and transition.next_state is not None:
             next_action = self._selected_actions[transition.next_state]

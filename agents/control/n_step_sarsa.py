@@ -35,7 +35,7 @@ class NStepSarsaControl(ControlAgent[StateT, ActionT]):
         seed: int | None = None,
     ):
         if n_steps < 1:
-            raise ValueError(f"n_steps must be >= 1, got {n_steps}")
+            raise ValueError("n_steps must be at least 1.")
         self.actions = actions
         self.n_steps = n_steps
         self.alpha = alpha
@@ -45,12 +45,19 @@ class NStepSarsaControl(ControlAgent[StateT, ActionT]):
 
     def reset(self) -> None:
         self.Q = defaultdict(float)
-        self._buffer: list[Transition[StateT, ActionT]] = []
         self._selected_actions: dict[StateT, ActionT] = {}
+        self._pending_transitions: list[Transition[StateT, ActionT]] = []
 
     # ── Action selection (ε-greedy) ───────────────────────────────────────
 
     def select_action(self, state: StateT) -> ActionT:
+        """Choose an epsilon-greedy action and cache it for the n-step bootstrap.
+
+        TODO:
+        1. With probability `self.epsilon`, choose a random action from `self.actions`.
+        2. Otherwise choose an action with the highest current action-value.
+        3. Store the chosen action in `self._selected_actions[state]` and return it.
+        """
         if self.rng.random() < self.epsilon:
             action = self.rng.choice(self.actions)
         else:
@@ -63,61 +70,63 @@ class NStepSarsaControl(ControlAgent[StateT, ActionT]):
     # ── Learning ──────────────────────────────────────────────────────────
 
     def update_transition(self, transition: Transition[StateT, ActionT]) -> None:
-        """Buffer the transition and perform the n-step update when ready."""
-        self._buffer.append(transition)
+        """Store the transition and update the oldest state-action when possible.
 
-        # We can update time step t once we have n more transitions (or the episode ends).
-        # Current buffer length = t + n  →  update index = len(buffer) - n - 1
-        # Only update if we have accumulated at least n+1 transitions (indices 0..n).
-        t = len(self._buffer) - self.n_steps
-        if t >= 0:
-            self._update_step(t)
+        TODO:
+        1. Append each transition to `self._pending_transitions`.
+        2. If the episode ended, keep updating and removing the oldest transition until the buffer is empty.
+        3. Otherwise, once the buffer length reaches `self.n_steps`, update the oldest transition and remove it.
+        4. Reuse `_update_oldest_transition()` for the actual target computation.
+        """
+        self._pending_transitions.append(transition)
+
+        if transition.done:
+            while self._pending_transitions:
+                self._update_oldest_transition()
+                self._pending_transitions.pop(0)
+            return
+
+        if len(self._pending_transitions) >= self.n_steps:
+            self._update_oldest_transition()
+            self._pending_transitions.pop(0)
 
     def end_episode(self) -> None:
-        """Flush remaining n-step updates at episode boundary."""
-        # Update all time steps that haven't been updated yet.
-        # Steps 0..len(buffer)-n_steps-1 were already updated online;
-        # steps len(buffer)-n_steps..len(buffer)-1 still need updating.
-        start = max(0, len(self._buffer) - self.n_steps + 1)
-        # But some of those may already have been handled if n_steps > buffer length
-        start = max(start, len(self._buffer) - self.n_steps)
-        # Simplify: just update all remaining un-updated steps
-        already_updated = max(0, len(self._buffer) - self.n_steps)
-        for t in range(already_updated, len(self._buffer)):
-            self._update_step(t)
-        self._buffer.clear()
+        """Flush any leftover pending transitions at the end of the episode.
+
+        TODO:
+        1. If there are still transitions in `self._pending_transitions`, keep updating the oldest one.
+        2. Remove each oldest transition after its update.
+        3. Clear cached selected actions before the next episode starts.
+        """
+        while self._pending_transitions:
+            self._update_oldest_transition()
+            self._pending_transitions.pop(0)
         self._selected_actions.clear()
 
-    def _update_step(self, t: int) -> None:
-        """Perform the n-step SARSA update for time step t."""
-        T = len(self._buffer)
+    def _update_oldest_transition(self) -> None:
+        """Compute the n-step target for the oldest transition still in the buffer.
 
-        # Build the n-step return: G_{t:t+n}
+        TODO:
+        1. Build a window with at most `self.n_steps` transitions starting from the oldest one.
+        2. Sum the discounted rewards inside that window.
+        3. If the window has exactly `self.n_steps` transitions and is non-terminal, bootstrap from
+           `Q(last_step.next_state, cached_next_action)`.
+        4. Apply the incremental update with `self.alpha` to the oldest `(state, action)` pair.
+        """
+        window = self._pending_transitions[: self.n_steps]
         G = 0.0
-        end = min(t + self.n_steps, T)
-        for k in range(t, end):
-            G += (self.gamma ** (k - t)) * self._buffer[k].reward
+        for k, step in enumerate(window):
+            G += (self.gamma ** k) * step.reward
 
-        # Bootstrap from Q(S_{t+n}, A_{t+n}) if the episode hasn't ended
-        last_transition = self._buffer[end - 1]
-        if not last_transition.done and end < T:
-            # The next transition at index `end` gives us S_{t+n} and A_{t+n}
-            next_s = self._buffer[end].state
-            next_a = self._buffer[end].action
+        last_step = window[-1]
+        if len(window) == self.n_steps and not last_step.done and last_step.next_state is not None:
+            next_s = last_step.next_state
+            next_a = self._selected_actions[next_s]
             G += (self.gamma ** self.n_steps) * self.action_value_of(next_s, next_a)
-        elif not last_transition.done and end == T and last_transition.next_state is not None:
-            # We're at the buffer boundary but the episode isn't done —
-            # bootstrap from the action that was already selected for next_state
-            next_s = last_transition.next_state
-            if next_s in self._selected_actions:
-                next_a = self._selected_actions[next_s]
-                G += (self.gamma ** (end - t)) * self.action_value_of(next_s, next_a)
 
-        # Update Q(S_t, A_t)
-        state = self._buffer[t].state
-        action = self._buffer[t].action
-        current_q = self.action_value_of(state, action)
-        self.Q[(state, action)] = current_q + self.alpha * (G - current_q)
+        oldest = self._pending_transitions[0]
+        current_q = self.action_value_of(oldest.state, oldest.action)
+        self.Q[(oldest.state, oldest.action)] = current_q + self.alpha * (G - current_q)
 
     # ── Value queries ─────────────────────────────────────────────────────
 

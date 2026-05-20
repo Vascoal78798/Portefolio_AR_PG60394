@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
-
+import random
 from envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState
 
 # Each of the 9 cells is encoded as a 3-dim one-hot vector (from the current
@@ -27,6 +27,15 @@ def encode_state(board: TicTacToeState, current_player: int) -> np.ndarray:
 
     Returns:
         np.ndarray of shape (27,), dtype float32.
+
+    TODO:
+    1. Create a zero array of shape (STATE_FEATURE_DIM,) with dtype float32.
+    2. Loop over each cell index i and its value in `board`.
+    3. For each cell set exactly one of the three slots to 1.0:
+       - slot i*3 + 0  if cell == current_player  (my piece)
+       - slot i*3 + 1  if cell == -current_player (opponent's piece)
+       - slot i*3 + 2  if cell == 0               (empty)
+    4. Return the feature vector.
     """
     phi = np.zeros(STATE_FEATURE_DIM, dtype=np.float32)
     for i, cell in enumerate(board):
@@ -37,3 +46,7 @@ def encode_state(board: TicTacToeState, current_player: int) -> np.ndarray:
         else:
             phi[i * 3 + 2] = 1.0   # empty
     return phi
+
+def random_action(env: TicTacToeEnv, state: TicTacToeState) -> TicTacToeAction:
+    """Choose a uniformly random legal action. Used as a baseline opponent."""
+    return random.choice(env.available_actions(state))

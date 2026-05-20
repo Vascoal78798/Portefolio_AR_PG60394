@@ -56,7 +56,14 @@ class LinearSarsaControl(ControlAgent[StateT, ActionT]):
         return action
 
     def update_transition(self, transition: Transition[StateT, ActionT]) -> None:
-        """Apply one semi-gradient SARSA update for the given transition."""
+        """Apply one semi-gradient SARSA update for the given transition.
+
+        TODO:
+        1. Compute the current feature vector `phi(s, a)`.
+        2. If the transition is non-terminal, bootstrap from `q_hat(s', a')`.
+        3. Compute the TD error `delta = r + gamma * q_hat(s', a') - q_hat(s, a)`.
+        4. Apply the semi-gradient update `w += alpha * delta * phi(s, a)`.
+        """
         phi = self.phi(transition.state, transition.action)
         bootstrap = 0.0
         if not transition.done and transition.next_state is not None:

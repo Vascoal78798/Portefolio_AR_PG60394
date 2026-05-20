@@ -44,6 +44,11 @@ def run_reinforce_episode(
 
     Returns:
         (mean_loss, winner)   where winner is 1, -1, or 0.
+
+    TODO:
+    1. Collect separate trajectories for X and O during self-play.
+    2. When a terminal winning move is detected, assign `r = -1` to the loser on its last stored step.
+    3. Update the shared REINFORCE agent from both trajectories at the end of the game.
     """
     state = env.reset()
 

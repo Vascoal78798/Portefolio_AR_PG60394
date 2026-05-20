@@ -39,17 +39,20 @@ class TicTacToeEnv(Environment[TicTacToeState, TicTacToeAction]):
     Conventions:
     - Player X always goes first (represented as +1 in the board).
     - Player O is represented as -1.
-    - `current_player` alternates between 1 (X) and -1 (O) each step while the game runs.
+    - `current_player` alternates between 1 (X) and -1 (O) each step.
     - The state is a length-9 tuple representing all 9 cells row-major:
         indices  0 1 2
                  3 4 5
                  6 7 8
-    - `step()` applies the current player's move, then switches turns if the game continues.
+    - `step()` applies the current player's move, then switches turns.
     - Episode ends when a player wins or the board is full (draw).
     - Rewards from the perspective of the player who just moved:
         +1  for winning
-        -1  for losing (opponent already won — edge case)
+        -1  for losing (opponent wins — not possible in one step, included for completeness)
          0  otherwise (ongoing or draw)
+
+    For self-play, call `reset()` at the start of each game and alternate
+    calling `step()` for player X and player O.
     """
 
     def __init__(self) -> None:
@@ -57,21 +60,51 @@ class TicTacToeEnv(Environment[TicTacToeState, TicTacToeAction]):
         self.current_player: int = 1  # X starts
 
     def reset(self) -> TicTacToeState:
-        """Reset the board to an empty state and set X as the first player."""
+        """Reset the board to an empty state and set X as the first player.
+
+        TODO:
+        1. Set `self.board` to a tuple of nine zeros.
+        2. Set `self.current_player` to 1 (player X).
+        3. Return the initial board state.
+        """
         self.board = (0,) * 9
         self.current_player = 1
         return self.board
 
     def available_actions(self, state: TicTacToeState) -> list[TicTacToeAction]:
-        """Return the indices of all empty cells in `state`."""
+        """Return the indices of all empty cells in `state`.
+
+        TODO:
+        1. Return a list of all cell indices i where state[i] == 0.
+        """
         return [i for i, c in enumerate(state) if c == 0]
 
     def is_terminal(self, state: TicTacToeState) -> bool:
-        """Return True if the game is over (win or draw)."""
+        """Return True if the game is over (win or draw).
+
+        TODO:
+        1. Use `_winner(state)` to check if any player has won.
+        2. Also return True if there are no empty cells left (draw).
+        """
         return _winner(state) != 0 or 0 not in state
 
     def step(self, action: TicTacToeAction) -> tuple[TicTacToeState, float, bool]:
-        """Place the current player's mark on cell `action` and advance the game."""
+        """Place the current player's mark on cell `action` and advance the game.
+
+        TODO:
+        1. Validate that `action` is a legal move (cell must be empty).
+           Raise `ValueError` if not.
+        2. Build the new board by placing `self.current_player` at `action`.
+           Hint: boards are tuples — use tuple slicing or `list` conversion.
+        3. Check for a winner using `_winner`.
+        4. Determine whether the episode is done:
+           - done = True if there is a winner OR no empty cells remain.
+        5. Compute the reward for the player who just moved:
+           - +1 if that player won, 0 otherwise.
+        6. Switch `self.current_player` to the other player (-1 ↔ +1).
+        7. Update `self.board` to the new board.
+        8. Return `(new_board, reward, done)`.
+        """
         if action < 0 or action > 8:
             raise ValueError(f"Invalid action index: {action}")
         if self.board[action] != 0:
@@ -99,27 +132,36 @@ class TicTacToeEnv(Environment[TicTacToeState, TicTacToeAction]):
             done = False
 
         self.board = new_board
-        if not done:
-            self.current_player = -player
+        self.current_player = -player
 
         return new_board, reward, done
 
     def render(self, state: TicTacToeState | None = None) -> None:
-        """Print a human-readable board to stdout."""
-        b = self.board if state is None else state
-        divider = "---+---+---"
+        """Print a human-readable board to stdout.
 
-        def cell_char(idx: int) -> str:
-            v = b[idx]
-            if v == 1:
+        TODO:
+        1. If `state` is None, use `self.board`.
+        2. Map cell values: 1 -> 'X', -1 -> 'O', 0 -> '.'.
+        3. Print three rows of three symbols separated by spaces,
+           with a blank line between rows for readability.
+           Example output for an empty board:
+               . . .
+               . . .
+               . . .
+        """
+        b = self.board if state is None else state
+
+        def cell_char(value: int) -> str:
+            if value == 1:
                 return "X"
-            if v == -1:
+            if value == -1:
                 return "O"
-            return str(idx + 1)
+            return "."
 
         for row in range(3):
             base = row * 3
-            line = f" {cell_char(base)} | {cell_char(base + 1)} | {cell_char(base + 2)} "
-            print(line)
+            print(
+                f"{cell_char(b[base])} {cell_char(b[base + 1])} {cell_char(b[base + 2])}"
+            )
             if row < 2:
-                print(divider)
+                print()

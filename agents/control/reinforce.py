@@ -75,6 +75,11 @@ class ReinforceAgent:
         Returns:
             1-D array of length ``len(available)`` that sums to 1.
 
+        TODO:
+        1. Compute logits only for the currently available actions.
+        2. Apply a numerically stable softmax by subtracting the maximum logit first.
+        3. Exponentiate and normalise so the returned probabilities sum to 1.
+
         """
         logits = (
             self.theta[available] @ phi
@@ -122,6 +127,12 @@ class ReinforceAgent:
 
         Returns:
             Mean policy-gradient loss over the episode (for monitoring).
+
+        TODO:
+        1. Compute the discounted return `G_t` for each time step by traversing rewards backwards.
+        2. For each stored step, evaluate the policy probabilities over the available actions.
+        3. Apply the REINFORCE score-function update for the chosen action and the non-chosen actions.
+        4. Accumulate a monitoring loss and optionally add the entropy regularisation contribution.
 
         """
         episode = trajectory if trajectory is not None else self._episode

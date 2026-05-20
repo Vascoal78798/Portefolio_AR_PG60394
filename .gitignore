@@ -32,7 +32,14 @@ ipython_config.py
 
 # Notebook “lixo” ocasional
 **/.DS_Store
+Untitled
+Untitled-*
 
+# --- Tooling / agent caches (not project code) ---
+.mplconfig/
+.codex/
+.agents/
+.cursor/
 
 # --- Editors / IDEs ---
 .vscode/
@@ -43,5 +50,14 @@ Thumbs.db
 Desktop.ini
 *.tmp
 *.log
+*~
+*.swp
+
+# Local env / secrets
+.env
+.env.*
+!.env.example
 
 .venv-pdf/
+
+# outputs/ — mantido no repositório (figuras e resultados dos scripts)

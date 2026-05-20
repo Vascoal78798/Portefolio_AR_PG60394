@@ -1,3 +1,4 @@
+from .bandits import EpsilonGreedy, GradientBandit, UCB
 from .control.monte_carlo import MonteCarloControl
 from .control.sarsa import SarsaControl
 from .prediction.monte_carlo import FirstVisitMonteCarloPrediction

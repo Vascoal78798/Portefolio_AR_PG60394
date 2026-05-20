@@ -100,6 +100,14 @@ class TorchSarsaControl(ControlAgent[StateT, ActionT]):
         return action
 
     def update_transition(self, transition: Transition[StateT, ActionT]) -> None:
+        """Apply one semi-gradient SARSA update in PyTorch.
+
+        TODO:
+        1. Build the SARSA target `r + gamma * q_hat(s', a')`, using 0 bootstrap on terminal transitions.
+        2. In the `use_optimizer=True` branch, compute the prediction for `(s, a)`.
+        3. Build the squared-error loss against the detached target.
+        4. Run `zero_grad()`, `backward()`, and `optimizer.step()`.
+        """
         bootstrap = 0.0
         if not transition.done and transition.next_state is not None:
             next_action = self._selected_actions[transition.next_state]
