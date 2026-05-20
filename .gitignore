@@ -1,0 +1,50 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / type / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+
+# --- Jupyter / IPython ---
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# Notebook “lixo” ocasional
+**/.DS_Store
+
+# --- Project outputs (generated artifacts) ---
+# README indica que esta pasta é gerada
+outputs/
+mia_rl/outputs/
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+
+# --- OS / misc ---
+Thumbs.db
+Desktop.ini
+*.tmp
+*.log
+
