@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from mia_rl.agents.planning.mcts import MCTSAgent
-from mia_rl.envs.tictactoe import (
+from agents.planning.mcts import MCTSAgent
+from envs.tictactoe import (
     TicTacToeAction,
     TicTacToeEnv,
     TicTacToeState,
     _winner,
 )
-from mia_rl.policies.tictactoe import Policy, random_action
+from policies.tictactoe import Policy, random_action
 
 
 # ── Policy wrapper ────────────────────────────────────────────────────────────

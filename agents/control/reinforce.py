@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from mia_rl.features.tictactoe import STATE_FEATURE_DIM
+from features.tictactoe import STATE_FEATURE_DIM
 
 # Number of board cells (= number of possible actions in TicTacToe)
 N_ACTIONS: int = 9

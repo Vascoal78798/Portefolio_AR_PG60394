@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mia_rl.envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState, _winner
-from mia_rl.policies.tictactoe import Policy, human_policy
+from envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState, _winner
+from policies.tictactoe import Policy, human_policy
 
 
 def play_game(

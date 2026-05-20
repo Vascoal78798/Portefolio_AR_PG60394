@@ -31,11 +31,11 @@ def main() -> None:
 
     import matplotlib.pyplot as plt
 
-    from mia_rl.agents.prediction import FirstVisitMonteCarloPrediction, TD0Prediction
-    from mia_rl.envs.blackjack import BlackjackEnv
-    from mia_rl.experiments.training import generate_episode, train_prediction_agent
-    from mia_rl.plots.blackjack import plot_value_difference, plot_value_function
-    from mia_rl.policies.blackjack import ThresholdPolicy
+    from agents.prediction import FirstVisitMonteCarloPrediction, TD0Prediction
+    from envs.blackjack import BlackjackEnv
+    from experiments.training import generate_episode, train_prediction_agent
+    from plots.blackjack import plot_value_difference, plot_value_function
+    from policies.blackjack import ThresholdPolicy
 
     policy = ThresholdPolicy(threshold=args.threshold)
 

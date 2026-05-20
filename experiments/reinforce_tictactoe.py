@@ -4,10 +4,10 @@ import random
 
 import numpy as np
 
-from mia_rl.agents.control.reinforce import ReinforceAgent
-from mia_rl.envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState, _winner
-from mia_rl.features.tictactoe import encode_state
-from mia_rl.policies.tictactoe import Policy, random_action
+from agents.control.reinforce import ReinforceAgent
+from envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState, _winner
+from features.tictactoe import encode_state
+from policies.tictactoe import Policy, random_action
 
 
 # ── Policy wrapper ────────────────────────────────────────────────────────────

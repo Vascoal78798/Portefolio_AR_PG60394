@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mia_rl.core.base import Policy
-from mia_rl.envs.blackjack import BlackjackAction, BlackjackState
+from core.base import Policy
+from envs.blackjack import BlackjackAction, BlackjackState
 
 
 class ThresholdPolicy(Policy[BlackjackState, BlackjackAction]):

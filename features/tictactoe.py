@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from mia_rl.envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState
+from envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState
 
 # Each of the 9 cells is encoded as a 3-dim one-hot vector (from the current
 # player's perspective): [my piece, opponent's piece, empty].

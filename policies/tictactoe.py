@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 from typing import Callable
 
-from mia_rl.envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState
+from envs.tictactoe import TicTacToeAction, TicTacToeEnv, TicTacToeState
 
 # Policy type: a callable that takes (env, state) and returns an action.
 Policy = Callable[[TicTacToeEnv, TicTacToeState], TicTacToeAction]

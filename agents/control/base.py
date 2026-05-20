@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Hashable, TypeVar
 
-from mia_rl.core.base import Agent, Transition
+from core.base import Agent, Transition
 
 StateT = TypeVar("StateT", bound=Hashable)
 ActionT = TypeVar("ActionT", bound=Hashable)

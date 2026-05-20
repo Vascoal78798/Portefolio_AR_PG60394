@@ -3,8 +3,8 @@ from __future__ import annotations
 import random
 from collections import defaultdict
 
-from mia_rl.agents.control.base import ActionT, ControlAgent, StateT
-from mia_rl.core.base import Transition
+from agents.control.base import ActionT, ControlAgent, StateT
+from core.base import Transition
 
 
 class MonteCarloControl(ControlAgent[StateT, ActionT]):

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mia_rl.core.base import Environment
+from core.base import Environment
 
 WindyGridworldState = tuple[int, int]
 WindyGridworldAction = str

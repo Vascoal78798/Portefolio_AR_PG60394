@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mia_rl.core.base import Episode, Policy, PredictionAgent, Transition
-from mia_rl.envs.blackjack import BlackjackAction, BlackjackEnv, BlackjackState
+from core.base import Episode, Policy, PredictionAgent, Transition
+from envs.blackjack import BlackjackAction, BlackjackEnv, BlackjackState
 
 
 def generate_episode(

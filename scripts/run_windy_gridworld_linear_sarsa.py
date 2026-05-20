@@ -53,15 +53,15 @@ def main() -> None:
 
     import matplotlib.pyplot as plt
 
-    from mia_rl.agents.control.linear_sarsa import LinearSarsaControl
-    from mia_rl.envs.windy_gridworld import ACTIONS, WindyGridworldEnv
-    from mia_rl.experiments.control import greedy_path, greedy_policy_from_agent
-    from mia_rl.experiments.fa_training import train_fa_agent
-    from mia_rl.features.windy_gridworld import (
+    from agents.control.linear_sarsa import LinearSarsaControl
+    from envs.windy_gridworld import ACTIONS, WindyGridworldEnv
+    from experiments.control import greedy_path, greedy_policy_from_agent
+    from experiments.fa_training import train_fa_agent
+    from features.windy_gridworld import (
         STATE_ACTION_FEATURE_DIM,
         state_action_features,
     )
-    from mia_rl.plots.windy_gridworld import (
+    from plots.windy_gridworld import (
         plot_episode_lengths,
         plot_policy,
         plot_td_errors,

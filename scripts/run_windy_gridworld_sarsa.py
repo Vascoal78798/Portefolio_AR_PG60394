@@ -38,10 +38,10 @@ def main() -> None:
 
     import matplotlib.pyplot as plt
 
-    from mia_rl.agents.control import SarsaControl
-    from mia_rl.envs.windy_gridworld import ACTIONS, WindyGridworldEnv
-    from mia_rl.experiments.control import greedy_path, greedy_policy_from_agent, train_control_agent
-    from mia_rl.plots.windy_gridworld import plot_episode_lengths, plot_episode_rewards, plot_policy
+    from agents.control import SarsaControl
+    from envs.windy_gridworld import ACTIONS, WindyGridworldEnv
+    from experiments.control import greedy_path, greedy_policy_from_agent, train_control_agent
+    from plots.windy_gridworld import plot_episode_lengths, plot_episode_rewards, plot_policy
 
     try:
         env = WindyGridworldEnv()

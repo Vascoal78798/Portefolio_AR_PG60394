@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from mia_rl.core.base import Episode, PredictionAgent
-from mia_rl.envs.blackjack import BlackjackAction, BlackjackState
+from core.base import Episode, PredictionAgent
+from envs.blackjack import BlackjackAction, BlackjackState
 
 
 class NStepTDPrediction(PredictionAgent[BlackjackState, BlackjackAction]):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import matplotlib.pyplot as plt
 import numpy as np
 
-from mia_rl.envs.windy_gridworld import WindyGridworldAction, WindyGridworldEnv, WindyGridworldState
+from envs.windy_gridworld import WindyGridworldAction, WindyGridworldEnv, WindyGridworldState
 
 ARROWS = {
     "up": "↑",

@@ -12,8 +12,8 @@ import torch.nn.functional as F
 # sequentially in the same process, and to keep per-step overhead low.
 torch.set_num_threads(1)
 
-from mia_rl.agents.control.base import ActionT, ControlAgent, StateT
-from mia_rl.core.base import Transition
+from agents.control.base import ActionT, ControlAgent, StateT
+from core.base import Transition
 
 
 class TorchSarsaControl(ControlAgent[StateT, ActionT]):

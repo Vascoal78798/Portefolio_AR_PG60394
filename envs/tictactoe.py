@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mia_rl.core.base import Environment
+from core.base import Environment
 
 # ── Type aliases ────────────────────────────────────────────────────────────
 # The board is a 9-tuple of ints (one per cell, row-major):

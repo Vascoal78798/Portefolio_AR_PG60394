@@ -33,10 +33,6 @@ ipython_config.py
 # Notebook “lixo” ocasional
 **/.DS_Store
 
-# --- Project outputs (generated artifacts) ---
-# README indica que esta pasta é gerada
-outputs/
-mia_rl/outputs/
 
 # --- Editors / IDEs ---
 .vscode/
@@ -48,3 +44,4 @@ Desktop.ini
 *.tmp
 *.log
 
+.venv-pdf/

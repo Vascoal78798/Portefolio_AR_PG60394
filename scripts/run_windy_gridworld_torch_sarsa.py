@@ -172,13 +172,13 @@ def main() -> None:
 
     import matplotlib.pyplot as plt
 
-    from mia_rl.agents.control import SarsaControl
-    from mia_rl.agents.control.linear_sarsa import LinearSarsaControl
-    from mia_rl.agents.control.torch_sarsa import TorchSarsaControl
-    from mia_rl.envs.windy_gridworld import ACTIONS, WindyGridworldEnv
-    from mia_rl.experiments.control import greedy_path, greedy_policy_from_agent, train_control_agent
-    from mia_rl.experiments.fa_training import train_fa_agent
-    from mia_rl.features.windy_gridworld import STATE_ACTION_FEATURE_DIM, state_action_features
+    from agents.control import SarsaControl
+    from agents.control.linear_sarsa import LinearSarsaControl
+    from agents.control.torch_sarsa import TorchSarsaControl
+    from envs.windy_gridworld import ACTIONS, WindyGridworldEnv
+    from experiments.control import greedy_path, greedy_policy_from_agent, train_control_agent
+    from experiments.fa_training import train_fa_agent
+    from features.windy_gridworld import STATE_ACTION_FEATURE_DIM, state_action_features
 
     env = WindyGridworldEnv()
     # Memoize phi: the grid is tiny (70 states × 4 actions = 280 entries) and the

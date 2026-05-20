@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from mia_rl.envs.windy_gridworld import (
+from envs.windy_gridworld import (
     ACTIONS,
     WindyGridworldAction,
     WindyGridworldEnv,

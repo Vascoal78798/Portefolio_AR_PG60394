@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from collections import defaultdict
 
-from mia_rl.core.base import Episode, PredictionAgent
-from mia_rl.envs.blackjack import BlackjackAction, BlackjackState
+from core.base import Episode, PredictionAgent
+from envs.blackjack import BlackjackAction, BlackjackState
 
 
 class FirstVisitMonteCarloPrediction(PredictionAgent[BlackjackState, BlackjackAction]):
@@ -12,6 +12,15 @@ class FirstVisitMonteCarloPrediction(PredictionAgent[BlackjackState, BlackjackAc
         self.N = defaultdict(int) #how many times have I already seen this state as a first visit?
 
     def update_episode(self, episode: Episode[BlackjackState, BlackjackAction]) -> None:
+        """Update the value table using first-visit Monte Carlo prediction.
+
+        TODO:
+        1. Traverse the episode backwards to compute the return G for each time step.
+        2. Identify the first visit of each state within the episode.
+        3. Update the sample-average estimate using self.N[state].
+            # Incremental mean update:
+            # V_new = V_old + (G - V_old) / N
+        """
         returns = [0.0] * len(episode.transitions)
         G = 0.0
         for idx in range(len(episode.transitions) - 1, -1, -1):
@@ -22,8 +31,8 @@ class FirstVisitMonteCarloPrediction(PredictionAgent[BlackjackState, BlackjackAc
         first_visit_index: dict[BlackjackState, int] = {}
         for idx, transition in enumerate(episode.transitions):
             first_visit_index.setdefault(transition.state, idx) 
-            #if this key is not in the dictionary yet, store this value;
-            #if key is already there, do nothing
+            # If this key is not in the dictionary yet, store this value;
+            # if the key is already there, do nothing.
 
         for idx, transition in enumerate(episode.transitions):
             state = transition.state

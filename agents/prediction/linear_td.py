@@ -4,8 +4,8 @@ from typing import Callable
 
 import numpy as np
 
-from mia_rl.core.base import Transition
-from mia_rl.envs.windy_gridworld import WindyGridworldState
+from core.base import Transition
+from envs.windy_gridworld import WindyGridworldState
 
 
 class LinearTD0:

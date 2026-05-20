@@ -3,7 +3,7 @@ from __future__ import annotations
 import matplotlib.pyplot as plt
 import numpy as np
 
-from mia_rl.envs.blackjack import BlackjackState
+from envs.blackjack import BlackjackState
 
 PLAYER_SUMS = tuple(range(12, 22))
 DEALER_SHOWING = tuple(range(1, 11))

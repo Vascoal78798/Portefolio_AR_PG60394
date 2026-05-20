@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 from typing import Optional
 
-from mia_rl.core.base import Environment
+from core.base import Environment
 
 BlackjackState = tuple[int, int, bool]
 BlackjackAction = str
