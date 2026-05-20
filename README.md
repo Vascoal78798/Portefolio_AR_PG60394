@@ -4,6 +4,29 @@ Este repositório reúne as várias práticas desenvolvidas na unidade curricula
 
 Além disso, esta organização facilita tanto a navegação como a validação do trabalho realizado. Por um lado, torna mais simples perceber onde está cada implementação; por outro, permite executar cada prática através de scripts ou notebooks específicos, mantendo uma base de código mais consistente.
 
+## Configuração do ambiente
+
+Em primeiro lugar, é recomendável criar um ambiente dedicado para o projeto. A forma mais simples de o fazer é usar o ficheiro [environment.yml](environment.yml), que já reúne a maior parte das dependências utilizadas ao longo das práticas e dos notebooks.
+
+```bash
+conda env create -f environment.yml
+conda activate rl
+```
+
+Se preferires usar um ambiente virtual com `venv`, também o podes fazer. Nesse caso, deves instalar pelo menos as dependências principais usadas no projeto, nomeadamente `numpy`, `matplotlib`, `jupyter` e `ipykernel`.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install numpy matplotlib jupyter ipykernel
+```
+
+Além disso, para correr a variante em PyTorch da Prática 6, pode ser necessário instalar também `torch`, caso essa biblioteca não esteja já disponível no ambiente ativo.
+
+```bash
+pip install torch
+```
+
 ## Estrutura do projeto
 
 - [core/](core/) contém as abstrações base do projeto, como `Environment`, `Agent`, `Policy`, `Episode` e `Transition`.
