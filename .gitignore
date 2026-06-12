@@ -59,5 +59,6 @@ Desktop.ini
 !.env.example
 
 .venv-pdf/
+PDFs /
 
 # outputs/ — mantido no repositório (figuras e resultados dos scripts)
